@@ -2,7 +2,7 @@
 This is a case study project.
 
 ## Demo
-![](https://github.com/EricAlvarez292/saxiflix/blob/main/app/src/main/res/raw/saxiflix-details-1.gif)
+![](https://github.com/EricAlvarez292/saxiflix/blob/main/app/src/main/res/raw/saxiflix_demo.gif)
 
 # Technologies
 - `Kotlin` 
