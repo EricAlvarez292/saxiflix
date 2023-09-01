@@ -1,4 +1,19 @@
 # Saxiflix
+This is a case study project.
 
-![saxiflix-details-2](https://github.com/EricAlvarez292/saxiflix/assets/38063922/304d945d-1873-4310-9a2f-e7bef00f5cb3)
+## Demo
+![](https://github.com/EricAlvarez292/saxiflix/blob/main/app/src/main/res/raw/saxiflix-details-1.gif)
+
+# Technologies
+- `Kotlin` 
+- `Retrofit` 
+- `OKHttp` 
+- `Coroutine` 
+- `StateFlow` 
+- `Koin` 
+- `Glide` 
+- `MVVM` 
+- [TMDB API](https://pages.github.com/](https://developer.themoviedb.org/reference/intro/getting-started)https://developer.themoviedb.org/reference/intro/getting-started/)
+
+
 
