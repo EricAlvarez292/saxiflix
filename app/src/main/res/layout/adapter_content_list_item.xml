@@ -1,85 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="140dp"
+    android:id="@+id/ivContainer"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="6dp">
+    android:layout_gravity="center"
+    android:layout_margin="6dp"
+    android:elevation="8dp"
+    app:cardCornerRadius="16dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".35" />
+        android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".65" />
+        <ImageView
+            android:id="@+id/ivBanner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/ivBanner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ProgressBar
+            android:id="@+id/pbVotes"
+            style="@style/CircularDeterminateProgressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="-20dp"
+            android:indeterminateOnly="false"
+            android:progress="60"
+            android:progressDrawable="@drawable/circle"
+            android:rotation="-90"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivBanner"
+            tools:progress="60" />
 
-    <ProgressBar
-        android:id="@+id/pbVotes"
-        style="@style/CircularDeterminateProgressBar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="-20dp"
-        android:indeterminateOnly="false"
-        android:progress="60"
-        android:progressDrawable="@drawable/circle"
-        android:rotation="-90"
-        app:layout_constraintStart_toStartOf="@id/ivBanner"
-        app:layout_constraintTop_toBottomOf="@id/ivBanner"
-        tools:progress="60" />
+        <TextView
+            android:id="@+id/tvVotes"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/pbVotes"
+            app:layout_constraintEnd_toEndOf="@id/pbVotes"
+            app:layout_constraintStart_toStartOf="@id/pbVotes"
+            app:layout_constraintTop_toTopOf="@id/pbVotes"
+            tools:text="75%" />
 
-    <TextView
-        android:id="@+id/tvVotes"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/pbVotes"
-        app:layout_constraintEnd_toEndOf="@id/pbVotes"
-        app:layout_constraintStart_toStartOf="@id/pbVotes"
-        app:layout_constraintTop_toTopOf="@id/pbVotes"
-        tools:text="75%" />
+        <TextView
+            android:id="@+id/tvBanner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:inputType="none"
+            android:maxLines="1"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/ivBanner"
+            app:layout_constraintStart_toStartOf="@id/ivBanner"
+            app:layout_constraintTop_toBottomOf="@id/pbVotes"
+            tools:text="Title" />
 
-    <TextView
-        android:id="@+id/tvBanner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/ivBanner"
-        app:layout_constraintStart_toStartOf="@id/ivBanner"
-        app:layout_constraintTop_toBottomOf="@id/pbVotes"
-        tools:text="Title" />
-
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="@id/ivBanner"
-        app:layout_constraintStart_toStartOf="@id/ivBanner"
-        app:layout_constraintTop_toBottomOf="@id/tvBanner"
-        tools:text="Release Date" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="@id/ivBanner"
+            app:layout_constraintStart_toStartOf="@id/ivBanner"
+            app:layout_constraintTop_toBottomOf="@id/tvBanner"
+            tools:text="Release Date" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

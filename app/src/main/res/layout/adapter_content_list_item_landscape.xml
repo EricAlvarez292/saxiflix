@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:padding="6dp">
 
     <androidx.constraintlayout.widget.Guideline
@@ -20,38 +21,52 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent=".65" />
 
-    <ImageView
-        android:id="@+id/ivBanner"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/ivContainer"
         android:layout_width="wrap_content"
-        android:layout_height="160dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/bg_landscape"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:elevation="8dp"
+        app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="160dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/bg_landscape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </com.google.android.material.card.MaterialCardView>
 
     <ImageView
         android:id="@+id/ivPlay"
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:src="@drawable/ic_baseline_play_arrow_24"
-        app:layout_constraintBottom_toBottomOf="@id/ivBanner"
-        app:layout_constraintEnd_toEndOf="@id/ivBanner"
-        app:layout_constraintStart_toStartOf="@id/ivBanner"
-        app:layout_constraintTop_toTopOf="@id/ivBanner" />
+        app:layout_constraintBottom_toBottomOf="@id/ivContainer"
+        app:layout_constraintEnd_toEndOf="@id/ivContainer"
+        app:layout_constraintStart_toStartOf="@id/ivContainer"
+        app:layout_constraintTop_toTopOf="@id/ivContainer" />
 
     <TextView
         android:id="@+id/tvBanner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:ellipsize="end"
         android:gravity="center"
+        android:inputType="none"
+        android:maxLines="1"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/ivBanner"
-        app:layout_constraintStart_toStartOf="@id/ivBanner"
-        app:layout_constraintTop_toBottomOf="@id/ivBanner"
+        app:layout_constraintEnd_toEndOf="@id/ivContainer"
+        app:layout_constraintStart_toStartOf="@id/ivContainer"
+        app:layout_constraintTop_toBottomOf="@id/ivContainer"
         tools:text="Title" />
 
     <TextView
@@ -61,9 +76,8 @@
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@id/ivBanner"
-        app:layout_constraintStart_toStartOf="@id/ivBanner"
+        app:layout_constraintEnd_toEndOf="@id/ivContainer"
+        app:layout_constraintStart_toStartOf="@id/ivContainer"
         app:layout_constraintTop_toBottomOf="@id/tvBanner"
         tools:text="Release Date" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
