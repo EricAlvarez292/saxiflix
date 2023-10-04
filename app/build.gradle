@@ -74,6 +74,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-process:$coroutine_lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$coroutine_lifecycle_version")
 
+    /*Paging3*/
+    def paging_version = "3.2.1"
+    implementation("androidx.paging:paging-runtime:$paging_version")
+    // alternatively - without Android dependencies for tests
+    testImplementation("androidx.paging:paging-common:$paging_version")
+
     /*Image*/
     implementation 'com.github.bumptech.glide:glide:4.15.1'
 

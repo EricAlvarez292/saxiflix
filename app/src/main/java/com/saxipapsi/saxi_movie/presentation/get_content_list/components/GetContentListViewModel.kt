@@ -1,90 +1,143 @@
 package com.saxipapsi.saxi_movie.presentation.get_content_list.components
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.saxipapsi.saxi_movie.common.ContentTrendingType
 import com.saxipapsi.saxi_movie.common.ContentType
-import com.saxipapsi.saxi_movie.common.Resource
-import com.saxipapsi.saxi_movie.domain.model.ContentHeaderModel
 import com.saxipapsi.saxi_movie.domain.model.ContentModel
+import com.saxipapsi.saxi_movie.domain.repository.TMDBRepository
 import com.saxipapsi.saxi_movie.domain.use_case.GetPopularListUseCase
 import com.saxipapsi.saxi_movie.domain.use_case.GetTopRatedListUseCase
 import com.saxipapsi.saxi_movie.domain.use_case.GetTrendingListUseCase
 import com.saxipapsi.saxi_movie.domain.use_case.GetUpComingListUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class GetContentListViewModel(
     private val getTrendingListUseCase: GetTrendingListUseCase,
     private val getPopularListUseCase: GetPopularListUseCase,
     private val getTopRatedListUseCase: GetTopRatedListUseCase,
-    private val getUpComingListUseCase: GetUpComingListUseCase
+    private val getUpComingListUseCase: GetUpComingListUseCase,
+    private val tmdbRepository: TMDBRepository,
+    private val savedStateHandle: SavedStateHandle
+
 ) : ViewModel() {
 
-    val  contentTrendingType : List<ContentTrendingType> = arrayListOf(ContentTrendingType.day, ContentTrendingType.week)
-    val  contentType : List<ContentType> = arrayListOf(ContentType.movie, ContentType.tv)
+    val contentTrendingType: List<ContentTrendingType> = arrayListOf(ContentTrendingType.day, ContentTrendingType.week)
+    val contentType: List<ContentType> = arrayListOf(ContentType.movie, ContentType.tv)
 
-    private val _upComingState = MutableStateFlow(ContentListState())
-    val upComingState: StateFlow<ContentListState> = _upComingState.apply { getUpComingList() }
-    private fun getUpComingList() {
-        val header = ContentHeaderModel(title = "Upcoming Soon")
-        getUpComingListUseCase().onEach { resource ->
-            when (resource) {
-                is Resource.Loading -> _upComingState.value = ContentListState(header = header, isLoading = true)
-                is Resource.Error -> _upComingState.value = ContentListState(header = header,error = resource.message ?: "Unexpected error occured.")
-                is Resource.Success -> {
-                    header.banner = resource.data?.asSequence()?.shuffled()?.find { true }?.banner /*"/hPcP1kv6vrkRmQO3YgV1H97FE5Q.jpg"*/
-                    _upComingState.value = ContentListState(header = header,data = resource.data)
+    /*Up Coming*/
+    private val _upComingHeader = MutableStateFlow(ContentHeaderModel())
+    val upComingHeader = _upComingHeader
+    val upComingDataFlow: Flow<PagingData<ContentModel>> =
+        tmdbRepository.getUpComingMovies().map { pagingData ->
+            pagingData.map { dataModel -> dataModel.toContentModel(ViewContentType.ROW_UPCOMING) }
+        }.cachedIn(viewModelScope)
+
+    /*Trending*/
+    val trendingDataFlow: Flow<PagingData<ContentModel>>
+    val trendingSFunction: (UiAction) -> Unit
+
+    /*Popular*/
+    val popularDataFlow: Flow<PagingData<ContentModel>>
+    val popularFunction: (UiAction) -> Unit
+
+    /*Top Rated*/
+    val topRatedSDataFlow: Flow<PagingData<ContentModel>>
+    val topRatedSFunction: (UiAction) -> Unit
+
+    init {
+
+        /*trending*/
+        val trendingQuery: String = savedStateHandle[TRENDING_CONTENT_TYPE] ?: ContentTrendingType.day.name
+        val trendingActionStateFlow = MutableSharedFlow<UiAction>()
+        val trendingSearches = trendingActionStateFlow
+            .filterIsInstance<UiAction.Search>()
+            .distinctUntilChanged()
+            .shareIn(
+                scope = viewModelScope,
+                started = WhileSubscribed(stopTimeoutMillis = 5000),
+                replay = 1
+            ).onStart { emit(UiAction.Search(query = trendingQuery)) }
+        trendingDataFlow = trendingSearches
+            .flatMapLatest {
+                tmdbRepository.getTrendingContents(it.query).map { pagingData ->
+                    pagingData.map { dataModel ->
+                        dataModel.toContentModel(ViewContentType.ROW_TRENDING)
+                    }
                 }
-            }
-        }.launchIn(viewModelScope)
+            }.cachedIn(viewModelScope)
+        trendingSFunction = { action ->
+            viewModelScope.launch { trendingActionStateFlow.emit(action) }
+        }
+
+        /*Popular*/
+        val popularQuery: String = savedStateHandle[POPULAR_CONTENT_TYPE] ?: ContentType.movie.name
+        val popularActionStateFlow = MutableSharedFlow<UiAction>()
+        val searches = popularActionStateFlow
+            .filterIsInstance<UiAction.Search>()
+            .distinctUntilChanged()
+            .shareIn(
+                scope = viewModelScope,
+                started = WhileSubscribed(stopTimeoutMillis = 5000),
+                replay = 1
+            ).onStart { emit(UiAction.Search(query = popularQuery)) }
+        popularDataFlow = searches
+            .flatMapLatest {
+                tmdbRepository.getPopularContents(it.query).map { pagingData ->
+                    pagingData.map { dataModel ->
+                        dataModel.toContentModel(ViewContentType.ROW_POPULAR)
+                    }
+                }
+            }.cachedIn(viewModelScope)
+        popularFunction = { action ->
+            viewModelScope.launch { popularActionStateFlow.emit(action) }
+        }
+
+        /*Top RatedS*/
+        val topRatedQuery: String =
+            savedStateHandle[TOP_RATED_CONTENT_TYPE] ?: ContentType.movie.name
+        val topRatedActionStateFlow = MutableSharedFlow<UiAction>()
+        val topRatedContentType = topRatedActionStateFlow
+            .filterIsInstance<UiAction.Search>()
+            .distinctUntilChanged()
+            .shareIn(
+                scope = viewModelScope,
+                started = WhileSubscribed(stopTimeoutMillis = 5000),
+                replay = 1
+            ).onStart { emit(UiAction.Search(query = topRatedQuery)) }
+        topRatedSDataFlow = topRatedContentType
+            .flatMapLatest {
+                tmdbRepository.getTopRatedContents(it.query).map { pagingData ->
+                    pagingData.map { dataModel ->
+                        dataModel.toContentModel(ViewContentType.ROW_TOPRATED)
+                    }
+                }
+            }.cachedIn(viewModelScope)
+        topRatedSFunction = { action ->
+            viewModelScope.launch { topRatedActionStateFlow.emit(action) }
+        }
     }
 
-    private val _trendingState = MutableStateFlow(ContentListState())
-    val trendingState: StateFlow<ContentListState> = _trendingState.apply { getTrendingList() }
-    fun getTrendingList(contentTrendingType: ContentTrendingType = ContentTrendingType.day) {
-        val header = ContentHeaderModel(title = "What's Trending")
-        getTrendingListUseCase(contentTrendingType).onEach { resource ->
-            when (resource) {
-                is Resource.Loading -> _trendingState.value = ContentListState(header = header, isLoading = true)
-                is Resource.Error -> _trendingState.value = ContentListState(header = header, error = resource.message ?: "Unexpected error occured.")
-                is Resource.Success -> _trendingState.value = ContentListState(header = header, data = resource.data)
-            }
-        }.launchIn(viewModelScope)
-    }
 
-    private val _popularState = MutableStateFlow(ContentListState())
-    val popularState: StateFlow<ContentListState> = _popularState.apply { getPopularList() }
-    fun getPopularList(contentType: ContentType = ContentType.movie) {
-        val header = ContentHeaderModel(title = "What's Popular")
-        getPopularListUseCase(contentType).onEach { resource ->
-            when (resource) {
-                is Resource.Loading -> _popularState.value = ContentListState(header = header, isLoading = true)
-                is Resource.Error -> _popularState.value = ContentListState(header = header, error = resource.message ?: "Unexpected error occured.")
-                is Resource.Success -> _popularState.value = ContentListState(header = header, data = resource.data)
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    private val _topRatedState = MutableStateFlow(ContentListState())
-    val topRatedState: StateFlow<ContentListState> = _topRatedState.apply { getTopTrendList() }
-    fun getTopTrendList(contentType: ContentType = ContentType.movie) {
-        val header = ContentHeaderModel(title = "Top Rated")
-        getTopRatedListUseCase(contentType).onEach { resource ->
-            when (resource) {
-                is Resource.Loading -> _topRatedState.value = ContentListState(header = header, isLoading = true)
-                is Resource.Error -> _topRatedState.value = ContentListState(header = header, error = resource.message ?: "Unexpected error occured.")
-                is Resource.Success -> _topRatedState.value = ContentListState(header = header, data = resource.data)
-            }
-        }.launchIn(viewModelScope)
+    companion object {
+        private const val TRENDING_CONTENT_TYPE: String = "trending_content_type"
+        private const val POPULAR_CONTENT_TYPE: String = "popular_content_type"
+        private const val TOP_RATED_CONTENT_TYPE: String = "top_rated_content_type"
     }
 }
 
-data class ContentListState(
-    val isLoading: Boolean = false,
-    val header: ContentHeaderModel? = null,
-    val data: List<ContentModel>? = null,
-    val error: String = ""
-)
+
+sealed class UiAction {
+    data class Search(val query: String) : UiAction()
+    data class Scroll(val currentQuery: String) : UiAction()
+}
+
+data class ContentHeaderModel(val title : String? = null, val banner : String? = null)

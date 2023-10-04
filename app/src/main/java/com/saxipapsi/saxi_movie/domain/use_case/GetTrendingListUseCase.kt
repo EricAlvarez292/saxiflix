@@ -19,8 +19,8 @@ class GetTrendingListUseCase(private val tmdbRepository: TMDBRepository) {
             Log.d("eric", "LoadGeoLocationUseCase")
             emit(Resource.Loading())
             val data = tmdbRepository.getTrendingContents(contentTrendingType.name)
-            val contentList = data.results.map { it.toContentModel(ViewContentType.ROW_TRENDING) }
-            emit(Resource.Success(contentList))
+//            val contentList = data.results.map { it.toContentModel(ViewContentType.ROW_TRENDING) }
+//            emit(Resource.Success(contentList))
         } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occured."))
         } catch (e: IOException) {

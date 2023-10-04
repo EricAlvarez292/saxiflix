@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
         tools:context=".presentation.MainActivity">
 
         <include
@@ -23,7 +24,7 @@
             android:id="@+id/containerTrending"
             layout="@layout/list_trending_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="360dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/containerUpComing" />
 
@@ -31,7 +32,7 @@
             android:id="@+id/containerPopular"
             layout="@layout/list_popular_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="360dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/containerTrending" />
 
@@ -39,7 +40,7 @@
             android:id="@+id/containerTopRated"
             layout="@layout/list_top_rated_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="360dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/containerPopular" />

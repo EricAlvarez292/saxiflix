@@ -1,6 +1,7 @@
 package com.saxipapsi.saxi_movie.di
 
 import android.app.Application
+import androidx.lifecycle.SavedStateHandle
 import com.saxipapsi.saxi_movie.data.remote.networkModule
 import com.saxipapsi.saxi_movie.data.repository.TMDBRepositoryImpl
 import com.saxipapsi.saxi_movie.domain.repository.TMDBRepository
@@ -47,7 +48,7 @@ val useCasesModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { GetContentListViewModel(get(), get(), get(), get()) }
+    viewModel { (handle: SavedStateHandle) -> GetContentListViewModel(get(), get(), get(), get(), get(), handle) }
     viewModel { GetContentDetailsViewModel(get()) }
     viewModel { ContentVideoViewModel(get()) }
     viewModel { ContentCreditsViewModel(get()) }

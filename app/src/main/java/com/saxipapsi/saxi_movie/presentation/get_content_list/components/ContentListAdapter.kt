@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.saxipapsi.saxi_movie.R
@@ -17,10 +17,11 @@ import com.saxipapsi.saxi_movie.domain.model.ContentHeaderModel
 import com.saxipapsi.saxi_movie.domain.model.ContentModel
 import com.saxipapsi.saxi_movie.domain.model.ImageUrlBuilder
 
-class ContentListAdapter(private val onContentBehaviorListener : OnContentBehaviorListener? = null) : RecyclerView.Adapter<ContentListViewHolder>() {
+class ContentListAdapter(private val onContentBehaviorListener : OnContentBehaviorListener? = null) : PagingDataAdapter<ContentModel, ContentListViewHolder>(DiffUtilCallBack){
 
     override fun getItemViewType(position: Int): Int {
-        val item = differ.currentList[position]
+        val item = getItem(position)!!
+
         return item.viewContentType.ordinal
     }
 
@@ -38,7 +39,7 @@ class ContentListAdapter(private val onContentBehaviorListener : OnContentBehavi
     }
 
     override fun onBindViewHolder(holder: ContentListViewHolder, position: Int) {
-        val item = differ.currentList[position]
+        val item = getItem(position)!!
         when (item.viewContentType) {
             ViewContentType.ROW_DEFAULT,
             ViewContentType.ROW_TRENDING,
@@ -47,13 +48,16 @@ class ContentListAdapter(private val onContentBehaviorListener : OnContentBehavi
             ViewContentType.ROW_UPCOMING -> holder.onUpComingInflateBody(item, R.id.ivBanner, R.id.ivPlay, R.id.tvBanner, R.id.tvDate)
         }
     }
-    override fun getItemCount(): Int = differ.currentList.size
-    private val diffUtil = object : DiffUtil.ItemCallback<ContentModel>() {
+    object DiffUtilCallBack : DiffUtil.ItemCallback<ContentModel>() {
         override fun areItemsTheSame(oldItem: ContentModel, newItem: ContentModel): Boolean = oldItem == newItem
         override fun areContentsTheSame(oldItem: ContentModel, newItem: ContentModel): Boolean = oldItem == newItem
     }
 
-    val differ = AsyncListDiffer(this, diffUtil)
+//    private val diffUtil = object : DiffUtil.ItemCallback<ContentModel>() {
+//        override fun areItemsTheSame(oldItem: ContentModel, newItem: ContentModel): Boolean = oldItem == newItem
+//        override fun areContentsTheSame(oldItem: ContentModel, newItem: ContentModel): Boolean = oldItem == newItem
+//    }
+//    val differ = AsyncListDiffer(this, diffUtil)
 }
 
 
@@ -173,29 +177,3 @@ interface OnTopRatedInflater {
     fun onTopRatedInflateHeader()
     fun onTopRatedInflateBody()
 }
-
-
-//class ContentListAdapter() : RecyclerView.Adapter<ContentListViewHolder>() {
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContentListViewHolder {
-//        val view = LayoutInflater.from(parent.context)
-//            .inflate(R.layout.adapter_content_list_item, parent, false)
-//        return ContentListViewHolder(view)
-//    }
-//
-//    override fun onBindViewHolder(holder: ContentListViewHolder, position: Int) {
-//        holder.bind(differ.currentList[position])
-//    }
-//
-//    override fun getItemCount(): Int = differ.currentList.size
-//
-//    private val diffUtil = object : DiffUtil.ItemCallback<ContentModel>() {
-//        override fun areItemsTheSame(oldItem: ContentModel, newItem: ContentModel): Boolean =
-//            oldItem == newItem
-//        override fun areContentsTheSame(oldItem: ContentModel, newItem: ContentModel): Boolean =
-//            oldItem == newItem
-//    }
-//    val differ = AsyncListDiffer(this, diffUtil)
-//}
-
-
-

@@ -20,6 +20,17 @@
         <entry key="..\:/Workspace/saxi/saxi_movie/app/src/main/res/layout/list_top_rated_layout.xml" value="0.328125" />
         <entry key="..\:/Workspace/saxi/saxi_movie/app/src/main/res/layout/list_trending_layout.xml" value="0.328125" />
         <entry key="..\:/Workspace/saxi/saxi_movie/app/src/main/res/layout/list_upcoming_layout.xml" value="0.328125" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/activity_content_details.xml" value="0.4822916666666667" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/activity_main.xml" value="0.47619047619047616" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/activity_splash.xml" value="0.1" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/adapter_content_list_item.xml" value="0.4822916666666667" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/adapter_content_list_item_landscape.xml" value="0.4822916666666667" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/adapter_credits_body_item.xml" value="0.4822916666666667" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/adapter_load_state_footer_item.xml" value="0.5" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/list_popular_layout.xml" value="0.1466565349544073" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/list_top_rated_layout.xml" value="0.46041666666666664" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/list_trending_layout.xml" value="0.4822916666666667" />
+        <entry key="..\:/Workspace/saxi/saxiflix/app/src/main/res/layout/list_upcoming_layout.xml" value="0.4" />
       </map>
     </option>
   </component>

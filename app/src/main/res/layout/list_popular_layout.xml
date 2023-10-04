@@ -12,12 +12,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center_vertical"
+        android:text="What's Popular"
         android:textColor="#000000"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Popular" />
+        tools:text="What's Popular" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide"
@@ -99,6 +100,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnRetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Retry"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

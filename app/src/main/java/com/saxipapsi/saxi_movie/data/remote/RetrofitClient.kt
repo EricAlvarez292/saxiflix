@@ -34,8 +34,8 @@ class RetrofitClient(private val retrofit: Retrofit) {
     }
 }
 
-private fun getOkHttpClient(authInterceptor : AuthInterceptor): OkHttpClient{
-    val okHttpClient : OkHttpClient.Builder = OkHttpClient.Builder()
+private fun getOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
+    val okHttpClient: OkHttpClient.Builder = OkHttpClient.Builder()
     okHttpClient.addInterceptor(authInterceptor)
     return okHttpClient.build()
 }
