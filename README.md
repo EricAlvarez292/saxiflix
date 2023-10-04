@@ -9,7 +9,8 @@ This is a case study project.
 - `Retrofit` 
 - `OKHttp` 
 - `Coroutine` 
-- `StateFlow` 
+- `Flow/StateFlow` 
+- `Paging3`
 - `Koin` 
 - `Glide` 
 - `MVVM` 
